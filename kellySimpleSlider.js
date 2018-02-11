@@ -1,4 +1,4 @@
-function KellySlider(cfg) {
+function KellySimpleSlider(cfg) {
 
     var input = false;
     var track = false;
