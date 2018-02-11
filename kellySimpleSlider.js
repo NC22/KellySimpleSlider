@@ -195,7 +195,7 @@ function KellySimpleSlider(cfg) {
     this.setValue = function(val, byInput) {
         
         if (!val) val = 0;
-        console.log('new val ' + val)
+        // console.log('new val ' + val)
         
         if (val <= range.from) val = range.from;
         if (val >= range.to) val = range.to;
@@ -207,7 +207,7 @@ function KellySimpleSlider(cfg) {
         
         var pxPerPercent = (trackBounds.width / 100);
         
-        console.log(val  + ' | ' +  percent);
+        // console.log(val  + ' | ' +  percent);
         updateBtnByX(Math.floor(percent * pxPerPercent));
         
         value = val;
