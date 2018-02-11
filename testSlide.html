@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>
+test
+</title>
+
+
+<style>
+
+.slider-track {
+    width: 100%;
+    height: 22px;
+    /*border: 1px solid rgba(168, 168, 168, 0.85);*/
+    position: relative;
+    border-radius: 12px;
+    background: rgb(253, 253, 253);
+    box-shadow: inset 0px 0px 9px 0px rgba(89, 89, 89, 0.16);
+}
+
+.slider-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    background: rgb(255, 112, 29);
+    z-index: 2;
+    /*border: 1px solid rgba(134, 134, 134, 0.14);*/
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor : pointer;
+}
+
+.form-test {
+    padding : 24px;
+    width : 246px;
+}
+
+.slider-fill {
+    background: rgba(255, 91, 29, 0.49);
+    /*background: linear-gradient(to right, rgb(104, 201, 107) 0%, rgb(151, 171, 45) 75%, rgba(117,137,12,1) 100%);*/
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 22px;
+    width: 100px;
+    z-index: 1;
+    border-radius : 12px;
+}
+
+
+
+.quad-track {
+    width: 100%;
+    height: 22px;
+    position: relative;
+    border-radius: 0;
+    background: rgb(253, 253, 253);
+    box-shadow: inset 0px 0px 9px 0px rgba(89, 89, 89, 0.16);
+}
+
+.quad-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    width: 32px;
+    border-radius: 0;
+    background: rgb(255, 112, 29);
+    z-index: 2;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor : pointer;
+}
+
+.quad-fill {
+    background: rgba(255, 91, 29, 0.49);
+    /*background: linear-gradient(to right, rgb(104, 201, 107) 0%, rgb(151, 171, 45) 75%, rgba(117,137,12,1) 100%);*/
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 22px;
+    width: 100px;
+    z-index: 1;
+    border-radius : 0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="form-test" style="display : inline-block; margin-top : 64px; margin-left : 64px;">
+<input class="slider" id="slider" type="text" value="0" style="margin-top : 64px;">
+<input class="slider" id="slider2" type="text" value="0" style="margin-top : 64px;">
+<span id="display"></span>
+</div>
+
+<script type="text/javascript" src="kellySimpleSlider.js"></script>
+
+<script>
+// KellySlider.loadDefaultCss('slider'); - uncomment if you dont want to set style, and use build-in style, from slider
+
+var slider = new KellySlider({input : 'slider', inputVisible : true, value : 2000, events : {
+
+        onChange : function(self){
+
+            // self.getInput().value = '1';
+            console.log('on change');
+            console.log(self.getInput());
+            document.getElementById('display').innerHTML = self.getValue();
+        }
+
+    }
+
+});
+
+
+var sliderQuad = new KellySlider({input : 'slider2', inputVisible : false, className : 'quad', value : 2000});
+
+</script>
+
+</body>
+
+</html>
