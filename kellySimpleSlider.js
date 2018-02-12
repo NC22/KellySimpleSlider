@@ -1,3 +1,19 @@
+/**
+ * @category  html5 widgets
+ * @package   Kelly
+ * @author    Rubchuk Vladimir <torrenttvi@gmail.com>
+ * @copyright 2018 Rubchuk Vladimir
+ * @license   GPLv3
+ * @version   0.8b
+ *
+ **/
+
+/**
+ * Create slider attached to an dom input element
+ * @param {Array} cfg
+ * @returns {KellyColorPicker}
+ */
+
 function KellySimpleSlider(cfg) {
 
     var input = false;
@@ -11,8 +27,7 @@ function KellySimpleSlider(cfg) {
     
     var currentClass = 'slider';
     
-    var events = {};
-    
+    var events = {};    
     var handler = this;
     
     var range = {from : 1000, to : 5000};
@@ -21,6 +36,8 @@ function KellySimpleSlider(cfg) {
     var userEvents = {};
     
     var value = 0;
+    var manualChangeTimer = false;
+    var manualChangeTimeout = 1500;
     
     function construct(cfg) {
         
@@ -56,15 +73,18 @@ function KellySimpleSlider(cfg) {
             return false;
         }
         
-        handler.updateBounds();
-              
-        
+        handler.updateBounds();       
         handler.setValue(value);
         
-        btn.onmousedown = function() {
+        var down = function() {
             handler.dragStart();
             return false;
-        }
+        };
+        
+        handler.addEventListner(track, "mousedown", down, '_slider_dragstart');
+        handler.addEventListner(track, "touchstart ", down, '_slider_dragstart');
+        
+        //btn.onmousedown = down;
                 
         setTimeout(function() { handler.enableTransition(); }, 500); // prevent animation on create
     } 
@@ -94,12 +114,10 @@ function KellySimpleSlider(cfg) {
             range.to = cfg.to;
         }
         
-        if (cfg.value) {
-            value = cfg.value;
-        } else {
-            value = range.from;
-        }          
-
+        if (cfg.step) {
+            step = parseInt(cfg.step);
+        }
+             
         if (cfg.input) {
             if (typeof cfg.input == 'string') {
                 input = document.getElementById(cfg.input);        
@@ -109,6 +127,19 @@ function KellySimpleSlider(cfg) {
             
             if (!input) return false;
         }
+ 
+        if (cfg.value) {
+            value = cfg.value;
+        } else { 
+            value = input.value;
+            
+            if (value !== '0') {    
+                value = parseInt(input.value);
+                if (!value) value = range.from;
+            } else {
+                value = 0;
+            }
+        }   
         
         if (!cfg.inputVisible) {        
             input.style.height = '0px';
@@ -117,6 +148,10 @@ function KellySimpleSlider(cfg) {
         
         if (cfg.className) {
             handler.setClass(cfg.className);
+        }
+        
+        if (typeof cfg.manualChangeTimeout !== 'undefined') {            
+            manualChangeTimeout = parseInt(cfg.manualChangeTimeout);        
         }
         
         return true;
@@ -211,7 +246,18 @@ function KellySimpleSlider(cfg) {
         updateBtnByX(Math.floor(percent * pxPerPercent));
         
         value = val;
-        if (!byInput) input.value = value;
+
+        if (manualChangeTimer) {
+            clearTimeout(manualChangeTimer);
+        }
+        
+        if (!byInput) {
+            input.value = value;
+        } else {
+            if (manualChangeTimeout > 0 && input.value != value) {
+                manualChangeTimer = setTimeout(function() { handler.setValue(value)}, manualChangeTimeout);
+            }
+        }
                 
         if (userEvents.onChange) userEvents.onChange(handler);
     }
@@ -232,8 +278,8 @@ function KellySimpleSlider(cfg) {
         value = Math.round(value / step) * step; 
         value = range.from + value;
         
-        console.log(pxValue + ' | ' + pxTotal + ' | ' + percent + '%' + ' | ' + rangeTotal + ' | ' + value);
-        //console.log(value)        
+        // console.log(pxValue + ' | ' + pxTotal + ' | ' + percent + '%' + ' | ' + rangeTotal + ' | ' + value);
+        // console.log(value)        
         
         handler.setValue(value);
     } 
@@ -244,21 +290,29 @@ function KellySimpleSlider(cfg) {
         drag = true;
         
         handler.updateBounds();
-        
-        handler.addEventListner(document.body, "mousemove", function (e) {
+
+        var move = function (e) {
             handler.updateByPos(e);
-        }, 'v1_drag_');
-        handler.addEventListner(document.body, "mouseup", function (e) {
+        }
+        
+        var up = function (e) {
             handler.dragEnd(e);
-        }, 'v1_drag_');
+        }
+        
+        handler.addEventListner(document, "touchend", up, 'v1_drag_');
+        handler.addEventListner(document, "mouseup", up, 'v1_drag_');        
+        handler.addEventListner(document, "touchmove", move, 'v1_drag_');
+        handler.addEventListner(document, "mousemove", move, 'v1_drag_');
     }
     
     this.dragEnd = function(e) {
         handler.enableTransition();
         drag = false;
-        handler.removeEventListener(document.body, "mousemove", 'v1_drag_');
-        handler.removeEventListener(document.body, "mouseup", 'v1_drag_');
         
+        handler.removeEventListener(document, "mousemove", 'v1_drag_');
+        handler.removeEventListener(document, "mouseup", 'v1_drag_');
+        handler.removeEventListener(document, "touchmove", 'v1_drag_');
+        handler.removeEventListener(document, "touchend", 'v1_drag_');
         handler.setValue(value);
     }
     
@@ -325,10 +379,10 @@ function KellySimpleSlider(cfg) {
     construct(cfg);
 }
 
-KellySlider.defaultStyle = false;
-KellySlider.loadDefaultCss = function(name) {
+KellySimpleSlider.defaultStyle = false;
+KellySimpleSlider.loadDefaultCss = function(name) {
      
-    if (KellySlider.defaultStyle) return true;
+    if (KellySimpleSlider.defaultStyle) return true;
     
     if (!name) name = 'slider';
     
@@ -378,8 +432,25 @@ KellySlider.loadDefaultCss = function(name) {
       style.appendChild(document.createTextNode(css));
     } 
     
-    KellySlider.defaultStyle = style;
+    KellySimpleSlider.defaultStyle = style;
     head.appendChild(style);
     return true;
 }
     
+KellySimpleSlider.attachToInputByClass = function (className, cfg) {
+
+    var sliders = new Array();
+    var inputs = document.getElementsByClassName(className);
+
+    for (var i = 0; i < inputs.length; i++) {
+
+        if (cfg)
+            cfg.input = inputs[i];
+        else
+            cfg = {input: inputs[i]};
+
+        sliders.push(new KellySimpleSlider(cfg));
+    }
+
+    return sliders;
+};
