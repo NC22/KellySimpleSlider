@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>
+Two sliders
+</title>
+<style>
+.slider-track {
+    width: 100%;
+    height: 22px;
+    position: relative;
+    border-radius: 12px;
+    background: rgb(253, 253, 253);
+    box-shadow: inset 0px 0px 9px 0px rgba(89, 89, 89, 0.16);
+}
+
+.slider-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    background: rgb(255, 112, 29);
+    z-index: 2;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor : pointer;
+}
+
+.form-test {
+    padding : 24px;
+    width : 246px;
+}
+
+.slider-fill {
+    background: rgba(255, 91, 29, 0.49);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 22px;
+    width: 100px;
+    z-index: 1;
+    border-radius : 12px;
+}
+
+.quad-track {
+    width: 100%;
+    height: 22px;
+    position: relative;
+    border-radius: 0;
+    background: rgb(253, 253, 253);
+    box-shadow: inset 0px 0px 9px 0px rgba(89, 89, 89, 0.16);
+}
+
+.quad-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    width: 32px;
+    border-radius: 0;
+    background: rgb(255, 112, 29);
+    z-index: 2;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    cursor : pointer;
+}
+
+.quad-fill {
+    background: rgba(255, 91, 29, 0.49);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 22px;
+    width: 100px;
+    z-index: 1;
+    border-radius : 0;
+}
+
+input[type=text] {
+    height: 32px;
+    width: 100%;
+    border : 0px;
+    margin-top: 10px;
+}
+
+.form-test > div {
+    margin-bottom : 32px;
+}
+
+.form-test > div > span {
+    display : block;
+    margin-bottom : 32px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="form-test" style="display : inline-block; margin-top : 64px; margin-left : 64px;">
+    <div>
+    <span>An rounded</span>
+    <input class="slider" id="slider" type="text" value="0">
+    </div><div>
+    <span>and an quad :)</span>
+    <input class="slider" id="slider2" type="text" value="0">
+    </div>
+</div>
+
+<script type="text/javascript" src="../kellySimpleSlider.js"></script>
+
+<script>
+var slider = new KellySimpleSlider({input : 'slider', inputVisible : true, value : 2000, manualChangeTimeout : 1000});
+var sliderQuad = new KellySimpleSlider({input : 'slider2', inputVisible : true, className : 'quad', value : 2000, manualChangeTimeout : false});
+</script>
+
+</body>
+
+</html>

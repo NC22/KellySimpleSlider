@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>
+Without css
+</title>
+</head>
+<body>
+
+<div class="form-test" style="display : inline-block; margin-top : 64px; margin-left : 64px;">
+<input class="slider" id="slider" type="text" value="3000" style="margin-top : 64px;">
+<span id="display"></span>
+</div>
+
+<script type="text/javascript" src="../kellySimpleSlider.js"></script>
+
+<script>
+    KellySimpleSlider.loadDefaultCss('slider');
+    var slider = new KellySimpleSlider({input : 'slider', inputVisible : false, from : 1000, to : 9000, step : 200, events : {
+            onChange : function(self){
+                document.getElementById('display').innerHTML = self.getValue();
+            }
+        }
+    });
+</script>
+
+</body>
+
+</html>
