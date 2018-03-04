@@ -4,7 +4,7 @@
  * @author    Rubchuk Vladimir <torrenttvi@gmail.com>
  * @copyright 2018 Rubchuk Vladimir
  * @license   GPLv3
- * @version   0.8b
+ * @version   0.81b
  *
  **/
 
@@ -26,7 +26,7 @@ function KellySimpleSlider(cfg) {
     var fillBounds = false;
     
     var currentClass = 'slider';
-    
+    var drag = false;
     var events = {};    
     var handler = this;
     
@@ -285,6 +285,7 @@ function KellySimpleSlider(cfg) {
     } 
     
     this.dragStart = function() {
+        if (drag) return false;
         
         handler.disableTransition();
         drag = true;
@@ -299,20 +300,20 @@ function KellySimpleSlider(cfg) {
             handler.dragEnd(e);
         }
         
-        handler.addEventListner(document, "touchend", up, 'v1_drag_');
-        handler.addEventListner(document, "mouseup", up, 'v1_drag_');        
-        handler.addEventListner(document, "touchmove", move, 'v1_drag_');
-        handler.addEventListner(document, "mousemove", move, 'v1_drag_');
+        handler.addEventListner(document.body, "touchend", up, 'v1_drag_');
+        handler.addEventListner(document.body, "mouseup", up, 'v1_drag_'); 
+        // handler.addEventListner(document.body, "mouseout", up, 'v1_drag_');    
+        handler.addEventListner(document.body, "touchmove", move, 'v1_drag_');
+        handler.addEventListner(document.body, "mousemove", move, 'v1_drag_');
     }
     
     this.dragEnd = function(e) {
         handler.enableTransition();
         drag = false;
-        
-        handler.removeEventListener(document, "mousemove", 'v1_drag_');
-        handler.removeEventListener(document, "mouseup", 'v1_drag_');
-        handler.removeEventListener(document, "touchmove", 'v1_drag_');
-        handler.removeEventListener(document, "touchend", 'v1_drag_');
+        handler.removeEventListener(document.body, "mousemove", 'v1_drag_');
+        handler.removeEventListener(document.body, "mouseup", 'v1_drag_');
+        handler.removeEventListener(document.body, "touchmove", 'v1_drag_');
+        handler.removeEventListener(document.body, "touchend", 'v1_drag_');
         handler.setValue(value);
     }
     
